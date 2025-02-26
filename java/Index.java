@@ -47,7 +47,7 @@ public class Index {
     }
 
     public static List<ListenerAdapter> loadEvents(Discord discord) {
-        List<ListenerAdapter> eventListeners = new ArrayList<>();
+        List<ListenerAdapter> eventListeners = new ArrayList<ListenerAdapter>();
         File eventFolder = new File("events");
         File[] eventFiles = eventFolder.listFiles((_, name) -> name.endsWith(".java"));
         if (eventFiles == null) return eventListeners;

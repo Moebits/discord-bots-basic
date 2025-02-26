@@ -1,18 +1,16 @@
 package commands;
-
-import net.dv8tion.jda.api.entities.Message;
 import structures.Discord;
+import structures.Command;
+import structures.CommandInfo;
+import structures.CommandInput;
 
-public class Ping {
-    Discord discord;
-    Message message;
-
-    public Ping(Discord discord, Message message) {
-        this.discord = discord;
-        this.message = message;
+public class Ping extends Command {
+    public Ping(Discord discord, CommandInput input) {
+        super(discord, input);
+        this.info = new CommandInfo("ping", "Pong");
     }
 
     public void run(String[] args) {
-        message.reply("Pong!").queue();
+        input.reply("Pong").queue();
     }
 }

@@ -3,8 +3,10 @@ package events;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import java.lang.reflect.Method;
 import structures.Discord;
+import structures.Command;
+import structures.CommandInput;
+import structures.MessageInput;
 
 public class MessageReceived extends ListenerAdapter {
     Discord discord;
@@ -23,12 +25,14 @@ public class MessageReceived extends ListenerAdapter {
 
         String[] args = content.substring(prefix.length()).split("\\s+");
 
+        String commandName = args[0].toLowerCase();
+
         try {
-            Class<?> commandClass = discord.commands.get(args[0].toLowerCase());
+            Class<?> commandClass = discord.commands.get(commandName);
             if (commandClass != null) {
-                Object commandInstance = commandClass.getDeclaredConstructor(Discord.class, Message.class).newInstance(discord, message);
-                Method runMethod = commandClass.getMethod("run", String[].class);
-                runMethod.invoke(commandInstance, (Object) args);
+                MessageInput input = new MessageInput(message);
+                Command command = (Command) commandClass.getDeclaredConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
+                command.run(args);
             }
         } catch (Exception e) {
             e.printStackTrace();
