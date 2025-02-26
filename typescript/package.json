@@ -1,0 +1,16 @@
+{
+  "name": "discord-bot-ts",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.ts"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  }
+}
