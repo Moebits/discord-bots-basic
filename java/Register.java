@@ -33,7 +33,7 @@ public class Register {
             try {
                 String className = "commands." + file.getName().replace(".java", "");
                 Class<?> cls = Class.forName(className);
-                Command command = (Command) cls.getDeclaredConstructor(Discord.class, CommandInput.class).newInstance(discord, null);
+                Command command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, null);
                 
                 commandUpdate.addCommands(Commands.slash(command.info.name, command.info.description));
                 registeredCommands.add(command.info.name);

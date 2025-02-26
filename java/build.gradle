@@ -13,7 +13,7 @@ dependencies {
 }
 
 application {
-    mainClass = "Index"
+    mainClass = "Main"
 }
 
 tasks.register("register", JavaExec) {

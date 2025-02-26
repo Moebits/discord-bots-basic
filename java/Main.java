@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import structures.Discord;
 
-public class Index {
+public class Main {
     public static void main(String[] args) throws InterruptedException {
         Dotenv dotenv = Dotenv.configure().load();
         String token = dotenv.get("TOKEN");
@@ -57,7 +57,7 @@ public class Index {
                 String className = "events." + file.getName().replace(".java", "");
                 Class<?> cls = Class.forName(className);
                 if (ListenerAdapter.class.isAssignableFrom(cls)) {
-                    eventListeners.add((ListenerAdapter) cls.getDeclaredConstructor(Discord.class).newInstance(discord));
+                    eventListeners.add((ListenerAdapter) cls.getConstructor(Discord.class).newInstance(discord));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

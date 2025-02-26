@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.User;
 import structures.Discord;
 
 public class Ready extends ListenerAdapter {
-    Discord discord;
+    protected Discord discord;
 
     public Ready(Discord discord) {
         this.discord = discord;

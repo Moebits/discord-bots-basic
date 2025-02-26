@@ -8,7 +8,7 @@ import structures.CommandInput;
 import structures.SlashCommandInput;
 
 public class SlashCommandInteraction extends ListenerAdapter {
-    Discord discord;
+    protected Discord discord;
 
     public SlashCommandInteraction(Discord discord) {
         this.discord = discord;
@@ -18,20 +18,18 @@ public class SlashCommandInteraction extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         var interaction = event.getInteraction();
 
+        String[] args = interaction.getOptions().stream().map(option -> option.getAsString()).toArray(String[]::new);
         String commandName = interaction.getName().toLowerCase();
 
-        String[] args = interaction.getOptions().stream().map(option -> option.getAsString()).toArray(String[]::new);
-
         try {
-            Class<?> commandClass = discord.commands.get(commandName);
-            if (commandClass != null) {
+            Class<?> cls = discord.commands.get(commandName);
+            if (cls != null) {
                 SlashCommandInput input = new SlashCommandInput(event);
-                Command command = (Command) commandClass.getDeclaredConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
+                Command command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
                 command.run(args);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
