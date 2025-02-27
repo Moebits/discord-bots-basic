@@ -1,5 +1,6 @@
 package events;
 
+import javax.annotation.Nonnull;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import structures.Discord;
@@ -15,7 +16,7 @@ public class SlashCommandInteraction extends ListenerAdapter {
     }
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+    public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         var interaction = event.getInteraction();
 
         String[] args = interaction.getOptions().stream().map(option -> option.getAsString()).toArray(String[]::new);

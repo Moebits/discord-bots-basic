@@ -1,6 +1,7 @@
 package events;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import javax.annotation.Nonnull;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import structures.Discord;
@@ -16,7 +17,7 @@ public class MessageReceived extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
         String content = message.getContentRaw().trim();
         String prefix = "!";
