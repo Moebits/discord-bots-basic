@@ -1,13 +1,8 @@
-using Discord.WebSocket;
 using Structures;
 
 namespace Events {
-    public class Ready {
-        private DiscordClient discord;
-
-        public Ready(DiscordClient discord) {
-            this.discord = discord;
-        }
+    public class Ready(DiscordClient discord) {
+        private readonly DiscordClient discord = discord;
 
         #pragma warning disable CS1998
         public async Task OnReady() {

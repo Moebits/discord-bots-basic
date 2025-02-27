@@ -1,18 +1,14 @@
+using Discord;
 using Discord.WebSocket;
 using Structures;
 
 namespace Commands {
-    public class Ping : ICommand {
-        private DiscordClient discord;
-        private SocketMessage message;
-
-        public Ping(DiscordClient discord, SocketMessage message) {
-            this.discord = discord;
-            this.message = message;
-        }
+    public class Ping(DiscordClient discord, SocketUserMessage message) : ICommand {
+        private readonly DiscordClient discord = discord;
+        private readonly SocketUserMessage message = message;
 
         public async Task Run(string[] args) {
-            await message.Channel.SendMessageAsync("Pong");
+            await message.ReplyAsync("Pong");
         }
     }
 }
