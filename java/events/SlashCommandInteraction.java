@@ -19,14 +19,14 @@ public class SlashCommandInteraction extends ListenerAdapter {
     public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         var interaction = event.getInteraction();
 
-        String[] args = interaction.getOptions().stream().map(option -> option.getAsString()).toArray(String[]::new);
-        String commandName = interaction.getName().toLowerCase();
+        var args = interaction.getOptions().stream().map(option -> option.getAsString()).toArray(String[]::new);
+        var commandName = interaction.getName().toLowerCase();
 
         try {
-            Class<?> cls = discord.commands.get(commandName);
+            var cls = discord.commands.get(commandName);
             if (cls != null) {
-                SlashCommandInput input = new SlashCommandInput(event);
-                Command command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
+                var input = new SlashCommandInput(event);
+                var command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
                 command.run(args);
             }
         } catch (Exception e) {

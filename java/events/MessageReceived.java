@@ -2,7 +2,6 @@ package events;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import javax.annotation.Nonnull;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import structures.Discord;
 import structures.Command;
@@ -18,20 +17,20 @@ public class MessageReceived extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        Message message = event.getMessage();
-        String content = message.getContentRaw().trim();
-        String prefix = "!";
+        var message = event.getMessage();
+        var content = message.getContentRaw().trim();
+        var prefix = "!";
         if (!content.startsWith(prefix)) return;
         if (content.equals(prefix)) return;
 
-        String[] args = content.substring(prefix.length()).split("\\s+");
-        String commandName = args[0].toLowerCase();
+        var args = content.substring(prefix.length()).split("\\s+");
+        var commandName = args[0].toLowerCase();
 
         try {
-            Class<?> cls = discord.commands.get(commandName);
+            var cls = discord.commands.get(commandName);
             if (cls != null) {
-                MessageInput input = new MessageInput(message);
-                Command command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
+                var input = new MessageInput(message);
+                var command = (Command) cls.getConstructor(Discord.class, CommandInput.class).newInstance(discord, input);
                 command.run(args);
             }
         } catch (Exception e) {

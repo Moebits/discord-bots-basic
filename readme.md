@@ -1,1 +1,1 @@
-Writing a simple discord bot in multiple languages!
+Writing a simple discord bot in several languages
