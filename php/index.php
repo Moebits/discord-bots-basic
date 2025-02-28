@@ -25,8 +25,6 @@ foreach ($commandFiles as $commandFile) {
     require_once $commandFile;
 }
 
-$discord->commands = $commands;
-
 $eventFiles = glob(__DIR__ . "/events/*.php");
 
 foreach ($eventFiles as $eventFile) {
