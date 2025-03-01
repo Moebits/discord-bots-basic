@@ -1,3 +1,6 @@
+# typed: true
+extend T::Sig
+
 require "dotenv/load"
 require "discordrb"
 
