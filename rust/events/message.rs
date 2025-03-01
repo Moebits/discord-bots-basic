@@ -7,8 +7,10 @@ use std::sync::Arc;
 use std::pin::Pin;
 use crate::commands;
 
+type CommandFnType = Box<dyn Fn(Arc<Context>, Arc<Message>) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync>;
+
 pub struct MessageEvent {
-    pub commands: HashMap<String, Box<dyn Fn(Arc<Context>, Arc<Message>) -> Pin<Box<dyn Future<Output = ()> + Send + 'static>> + Send + Sync>>,
+    pub commands: HashMap<&'static str, CommandFnType>,
 }
 
 impl MessageEvent {
@@ -18,10 +20,10 @@ impl MessageEvent {
         }
     }
 
-    pub fn load_commands() -> HashMap<String, Box<dyn Fn(Arc<Context>, Arc<Message>) -> Pin<Box<dyn Future<Output = ()> + Send + 'static>> + Send + Sync>> {
-        let mut commands: HashMap<String, Box<dyn Fn(Arc<Context>, Arc<Message>) -> Pin<Box<dyn Future<Output = ()> + Send + 'static>> + Send + Sync>> = HashMap::new();
+    pub fn load_commands() -> HashMap<&'static str, CommandFnType> {
+        let mut commands: HashMap<&'static str, CommandFnType> = HashMap::new();
 
-        commands.insert("ping".to_string(), Box::new(|ctx, msg| Box::pin(commands::ping::Ping::execute(ctx, msg))));
+        commands.insert("ping", Box::new(|ctx, msg| Box::pin(commands::ping::Ping::execute(ctx, msg))));
 
         return commands;
     }
@@ -40,7 +42,7 @@ impl EventHandler for MessageEvent {
         }
         
         let args: Vec<&str> = msg.content.trim()[prefix.len()..].split_whitespace().collect();
-        let command_name = args[0].to_lowercase();
+        let command_name: &str = &args[0].to_lowercase();
 
         if let Some(command) = self.commands.get(&command_name) {
             command(Arc::new(ctx), Arc::new(msg)).await;
