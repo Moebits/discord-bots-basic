@@ -1,0 +1,4 @@
+.env
+build
+deps
+.DS_Store

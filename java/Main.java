@@ -16,7 +16,7 @@ public class Main {
             .enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .build();
 
-            var discord = new Discord(jda); 
+        var discord = new Discord(jda); 
 
         loadCommands(discord);
 
