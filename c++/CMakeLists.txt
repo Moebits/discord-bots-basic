@@ -14,7 +14,7 @@ project(DiscordBot)
 set(PROJECT_NAME main)
 add_executable(${PROJECT_NAME} main.cpp)
 
-include(CPM.cmake)
+include(CPM.txt)
 
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps)
 
