@@ -12,29 +12,19 @@ endif()
 
 project(DiscordBot)
 set(PROJECT_NAME main)
-add_executable(${PROJECT_NAME} main.cpp)
 
-include(CPM.txt)
+file(GLOB SRC_FILES "*.cpp" "commands/*.cpp" "events/*.cpp" "structures/*.cpp")
+add_executable(${PROJECT_NAME} ${SRC_FILES})
 
-set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps)
+include(FetchContent)
 
-CPMAddPackage(
-    NAME dpp
-    GITHUB_REPOSITORY brainboxdotcc/DPP
-    VERSION 10.1.0
-    SOURCE_DIR ${LIB_DIR}/dpp
+FetchContent_Declare(
+  dpp
+  GIT_REPOSITORY https://github.com/brainboxdotcc/DPP
+  GIT_TAG        v10.1.0
 )
+FetchContent_MakeAvailable(dpp)
 
-CPMAddPackage(
-    NAME dotenv
-    GITHUB_REPOSITORY harshfeudal/dotenv
-    GIT_TAG 1.2.1
-    VERSION 1.2.1
-    SOURCE_DIR ${LIB_DIR}/dotenv
-)
-
-find_package(dpp CONFIG REQUIRED)
-
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR}/dotenv/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dpp)
