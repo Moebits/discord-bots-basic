@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <unordered_map>
+#include <typeindex>
 #include "structures/functions.h"
 #include "structures/command.h"
 #include "commands/ping.h"
