@@ -4,5 +4,5 @@
 
 class Ping : public Command {
 public:
-    void run(const dpp::message_create_t &event, const std::vector<std::string>& args) override;
+    void run(const dpp::message_create_t& event, const std::vector<std::string>& args) override;
 };

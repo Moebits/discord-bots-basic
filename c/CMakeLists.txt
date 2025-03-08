@@ -6,7 +6,7 @@ set(CMAKE_C_COMPILER "/opt/homebrew/bin/gcc-14")
 project(DiscordBot C)
 set(PROJECT_NAME main)
 
-file(GLOB SRC_FILES "*.c")
+file(GLOB SRC_FILES "*.c" "commands/*.c" "events/*.c" "structures/*.c")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 include(ExternalProject)
@@ -36,7 +36,7 @@ include(FetchContent)
 FetchContent_Declare(
   dotenv
   GIT_REPOSITORY https://github.com/Isty001/dotenv-c
-  GIT_TAG        master
+  GIT_TAG        494e8062e2dae17169c9c67998bb7aba27cdaaf4
 )
 FetchContent_MakeAvailable(dotenv)
 

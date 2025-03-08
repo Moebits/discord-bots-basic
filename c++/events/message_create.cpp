@@ -6,7 +6,7 @@ void message_create::load_commands() {
     commands["ping"] = new Ping();
 }
 	 
-void message_create::on_message_create(const dpp::message_create_t &event) {
+void message_create::on_message_create(const dpp::message_create_t& event) {
     std::string prefix = "!";
     std::string content = functions::trim(event.msg.content);
 

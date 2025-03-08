@@ -3,5 +3,5 @@
 
 class functions {
 public:
-    static std::string trim(const std::string &s);
+    static std::string trim(const std::string& s);
 };
