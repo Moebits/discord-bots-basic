@@ -1,12 +1,15 @@
 package events
 
-import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.dv8tion.jda.api.events.session.ReadyEvent
+import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.core.on
+import structures.Event
 import structures.Discord
 
-class Ready(private val discord: Discord) : ListenerAdapter() {
-    override fun onReady(event: ReadyEvent) {
-        val selfUser = event.jda.selfUser
-        println("Logged in as ${selfUser.name}!")
+class Ready : Event {
+    override suspend fun handle(discord: Discord) {
+        discord.kord.on<ReadyEvent> {
+            val username = discord.kord.getSelf().username
+            println("Logged in as $username!")
+        }
     }
 }

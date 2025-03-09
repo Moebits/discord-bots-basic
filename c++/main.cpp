@@ -4,22 +4,25 @@
 #include <dpp/dpp.h>
 #include "events/ready.h"
 #include "events/message_create.h"
+using std::string;
+using std::ifstream;
+using std::getline;
 
 void loadEnv() {
-    std::ifstream file("../.env");
+    ifstream file("../.env");
 
-    std::string line;
-    while (std::getline(file, line)) {
+    string line;
+    while (getline(file, line)) {
         line.erase(0, line.find_first_not_of(" \t\r\n"));
         line.erase(line.find_last_not_of(" \t\r\n") + 1);
 
         if (line.empty() || line[0] == '#') continue;
 
         size_t pos = line.find('=');
-        if (pos == std::string::npos) continue;
+        if (pos == string::npos) continue;
 
-        std::string key = line.substr(0, pos);
-        std::string value = line.substr(pos + 1);
+        string key = line.substr(0, pos);
+        string value = line.substr(pos + 1);
 
         key.erase(0, key.find_first_not_of(" \t"));
         key.erase(key.find_last_not_of(" \t") + 1);
@@ -33,7 +36,7 @@ void loadEnv() {
 
 int main() {
 	loadEnv();
-    std::string token = std::getenv("TOKEN");
+    string token = getenv("TOKEN");
 
     auto intents = dpp::i_default_intents | dpp::i_message_content;
     dpp::cluster discord(token, intents);

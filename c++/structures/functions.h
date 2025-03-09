@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+using std::string;
 
 class functions {
 public:
-    static std::string trim(const std::string& s);
+    static string trim(const string& s);
 };

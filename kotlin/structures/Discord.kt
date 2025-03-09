@@ -1,7 +1,8 @@
 package structures
 
-import net.dv8tion.jda.api.JDA
+import dev.kord.core.Kord
+import dev.kord.core.entity.Message
 
-class Discord(val jda: JDA) {
-    val commands: MutableMap<String, Class<*>> = mutableMapOf()
+class Discord(val kord: Kord) {
+    val commands = hashMapOf<String, Class<*>>()
 }

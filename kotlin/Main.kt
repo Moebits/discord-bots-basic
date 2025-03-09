@@ -1,59 +1,72 @@
 import io.github.cdimascio.dotenv.Dotenv
-import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.requests.GatewayIntent
-import net.dv8tion.jda.api.hooks.ListenerAdapter
+import dev.kord.core.Kord
+import dev.kord.core.on
+import dev.kord.gateway.Intent
+import dev.kord.gateway.PrivilegedIntent
+import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.core.event.message.MessageCreateEvent
+import kotlinx.coroutines.runBlocking
 import java.io.File
+import structures.Event
+import structures.Command
 import structures.Discord
-import kotlin.io.path.nameWithoutExtension
 
 object Main {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = runBlocking {
         val token = Dotenv.configure().load()["TOKEN"]
+        val kord = Kord(token)
+        val discord = Discord(kord)
 
-        val jda = JDABuilder.createDefault(token)
-            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-            .build()
-
-        val discord = Discord(jda)
         loadCommands(discord)
-        jda.addEventListener(*loadEvents(discord).toTypedArray())
 
-        jda.awaitReady()
+        val eventListeners = loadEvents()
+        eventListeners.forEach{it.handle(discord)}
+
+        discord.kord.login {
+            @OptIn(PrivilegedIntent::class)
+            intents += Intent.MessageContent
+        }
     }
 
-    fun loadCommands(discord: Discord) {
+    fun loadCommands(discord: Discord): HashMap<String, Class<*>> {
+        val commands = hashMapOf<String, Class<*>>()
         val commandFolder = File("commands")
-        val commandFiles = commandFolder.listFiles{_, name -> name.endsWith(".kt")} ?: return
+        val commandFiles = commandFolder.listFiles{_, name -> name.endsWith(".kt")}
+        if (commandFiles == null) return commands
 
         for (file in commandFiles) {
             try {
                 val className = "commands.${file.nameWithoutExtension}"
                 val cls = Class.forName(className)
+                var commandName = file.getName().replace(".kt", "").lowercase()
 
-                val commandName = file.nameWithoutExtension.lowercase()
-                discord.commands[commandName] = cls
+                discord.commands.put(commandName, cls);
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+        return commands
     }
 
-    fun loadEvents(discord: Discord): List<ListenerAdapter> {
+    fun loadEvents(): List<Event> {
+        val eventListeners = mutableListOf<Event>()
         val eventFolder = File("events")
-        val eventFiles = eventFolder.listFiles{_, name -> name.endsWith(".kt")} ?: return emptyList()
-    
-        return eventFiles.mapNotNull{file ->
-            val className = "events.${file.nameWithoutExtension}"
-            runCatching {
+        val eventFiles = eventFolder.listFiles{_, name -> name.endsWith(".kt")}
+        if (eventFiles == null) return eventListeners
+
+        for (file in eventFiles) {
+            try {
+                val className = "events.${file.nameWithoutExtension}"
                 val cls = Class.forName(className)
-                if (ListenerAdapter::class.java.isAssignableFrom(cls)) {
-                    cls.getConstructor(Discord::class.java).newInstance(discord) as ListenerAdapter
-                } else null
-            }.getOrElse { 
-                it.printStackTrace()
-                null 
+                if (Event::class.java.isAssignableFrom(cls) && !cls.isInterface) {
+                    val eventListener = cls.getConstructor().newInstance() as Event
+                    eventListeners.add(eventListener)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
-    }    
+        return eventListeners
+    }
 }

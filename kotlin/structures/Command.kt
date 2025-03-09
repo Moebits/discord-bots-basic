@@ -1,7 +1,8 @@
 package structures
 
-import net.dv8tion.jda.api.entities.Message
+import dev.kord.core.entity.Message
+import structures.Discord
 
 abstract class Command(val discord: Discord, val message: Message) {
-    abstract fun run(args: Array<String>)
+    abstract suspend fun run(args: List<String>)
 }
