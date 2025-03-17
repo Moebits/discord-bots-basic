@@ -1,0 +1,3 @@
+[deps]
+Discord = "fcbf000d-02fd-53f1-af91-d952191673d3"
+DotEnv = "4dc1fcf4-5e3b-5448-94ab-0c38ec0385c1"
